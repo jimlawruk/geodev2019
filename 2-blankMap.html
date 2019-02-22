@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Blank Map</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link href="https://js.arcgis.com/4.10/esri/css/main.css" rel="stylesheet" type="text/css">
+  <script src="https://js.arcgis.com/4.10"></script>
+</head>
+
+<script>
+require([
+    //Blank Map and MapView
+    "esri/Map",
+    "esri/views/MapView",
+], function(
+    Map, MapView,
+  ) {
+
+    var map = new Map({
+      basemap: "streets"
+    });
+
+    var view = new MapView({
+      container: "viewDiv",
+      map: map,
+      zoom: 12,
+      center: [-76.87, 40.26]
+    });
+});
+</script>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

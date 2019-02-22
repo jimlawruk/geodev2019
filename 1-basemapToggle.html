@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -23,10 +22,15 @@
 
 <script>
 require([
-  "esri/Map",
-  "esri/views/MapView"
-], function(Map, MapView) {
-
+    //Blank Map and MapView
+    "esri/Map",
+    "esri/views/MapView",
+    //Basemap Toggle
+    "esri/widgets/BasemapToggle",
+], function(
+    Map, MapView, 
+    BasemapToggle
+  ) {
     var map = new Map({
       basemap: "streets"
     });
@@ -37,6 +41,17 @@ require([
       zoom: 14,
       center: [-76.87, 40.26]
     });
+
+    var toggle = new BasemapToggle({
+      titleVisible: true,
+      view: view
+      });
+    view.ui.add(toggle, "bottom-right");
+
+    view.when(function() {
+      
+    });    
+
 });
 </script>
 

@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>Blank Map</title>
+
+  <style>
+    html,
+    body,
+    #viewDiv {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+  </style>
+
+  <link href="https://js.arcgis.com/4.10/esri/css/main.css" rel="stylesheet" type="text/css">
+  <script src="https://js.arcgis.com/4.10"></script>
+</head>
+
+<script>
+require([
+    //Blank Map and MapView
+    "esri/Map",
+    "esri/views/MapView",
+    //Basemap Toggle
+    "esri/widgets/BasemapToggle",
+    //LayerList
+    "esri/widgets/LayerList",
+      //GeoJSON Layer Setup
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/geometry/Polyline",
+      "esri/request",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/geometry/SpatialReference",
+  ], function (
+      Map, MapView,
+      BasemapToggle,
+      LayerList,
+      Graphic, GraphicsLayer, Polyline, request, SimpleLineSymbol, SpatialReference
+) {
+
+    var map = new Map({
+      basemap: "streets"
+    });
+
+    var view = new MapView({
+      container: "viewDiv",
+      map: map,
+      zoom: 12,
+      center: [-76.87, 40.26]
+    });
+
+    var toggle = new BasemapToggle({
+      titleVisible: true,
+      view: view
+      });
+    view.ui.add(toggle, "bottom-right");
+     
+    var layerList = new LayerList({
+        view: view
+      });   
+    view.ui.add(layerList, "top-right");  
+
+    addGeoJSONLayer("boyds.geojson", "Boyds", [200, 0, 0, 1]);
+
+    addGeoJSONLayer("greenbelt.geojson", "Greenbelt", [0, 200, 0, 1]);
+
+    addGeoJSONLayer("pinchot.geojson", "Pinchot", [0, 0, 200, 1]);
+
+
+    function addGeoJSONLayer(fileName, title, colorArray, esri) {
+      request(fileName, { responseType: 'json' }).then(function (response) {
+        var geoJson = response.data;
+        var graphics = getEsriGraphicsFromGeoJson(geoJson, 4326, colorArray, esri);
+        var graphicsLayer = new GraphicsLayer();
+        graphicsLayer.title = title;
+        graphics.forEach(function (graphic) {
+          graphicsLayer.add(graphic);
+        });
+        map.add(graphicsLayer);
+      });
+    }
+
+    function getEsriGraphicsFromGeoJson(geoJson, wkid, colorArray, esri) {
+
+      return geoJson.features.map(function (feature, i) {
+        var paths = feature.geometry.coordinates || feature.geometry.paths;
+        if (esri) {
+          paths = paths[0];
+        }
+        var polyline = new Polyline({
+          'type': 'polyline',
+          'paths': paths,
+          'spatialReference': new SpatialReference({ 'wkid': wkid })
+        });
+
+        lineSymbol = new SimpleLineSymbol({ type: "simple-line", color: colorArray, width: 2, style: "solid" });
+
+        var graphicDefinition = {
+          geometry: polyline,
+          symbol: lineSymbol,
+          attributes: feature.properties || feature.attributes,
+          popupTemplate: {
+            title: "Segment",
+            content: [{
+              type: "fields",
+              fieldInfos: []
+            }]
+          }
+        }
+
+        for (var property in feature.properties) {
+          var fieldInfo = { "fieldName": property }
+          graphicDefinition.popupTemplate.content[0].fieldInfos.push(fieldInfo);
+        }
+
+        var polylineGraphic = new Graphic(graphicDefinition);
+        return polylineGraphic;
+      });
+
+    }
+
+
+});
+</script>
+
+<body>
+  <div id="viewDiv"></div>
+</body>
+
+</html>

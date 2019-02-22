@@ -1,0 +1,20 @@
+1. Add to require:
+
+    //DCNR Feature Layer
+    "esri/layers/FeatureLayer",
+
+FeatureLayer,
+
+
+ 2. Add code to add the DCNR Trails FeatureLayer:
+
+
+    var featureLayer = new FeatureLayer({
+      url: "//www.gis.dcnr.state.pa.us/agsprod/rest/services/Parks/State_Parks/MapServer/4"
+    });
+    map.add(featureLayer);
+
+    var featureLayer = new FeatureLayer({
+      url: "//www.gis.dcnr.state.pa.us/agsprod/rest/services/Parks/State_Parks/MapServer/5"
+    });
+    map.add(featureLayer);    

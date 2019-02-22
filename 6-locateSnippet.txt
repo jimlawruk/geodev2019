@@ -1,0 +1,14 @@
+1. Add to require:
+
+    //Locate
+    "esri/widgets/Locate",
+
+Locate,
+
+
+ 2. Add code to add the Locate:
+
+    var locateBtn = new Locate({
+      view: view
+    });      
+    view.ui.add(locateBtn, "top-left");

@@ -1,0 +1,14 @@
+1. Add to require:
+
+    //LayerList
+    "esri/widgets/LayerList",
+
+LayerList,
+
+
+ 2. Add code to create/display the LayerList:
+ 
+    var layerList = new LayerList({
+        view: view
+      });   
+    view.ui.add(layerList, "top-right");

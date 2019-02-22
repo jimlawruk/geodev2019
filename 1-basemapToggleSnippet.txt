@@ -1,0 +1,15 @@
+1. Add BasemapToggle Module to the require:
+
+    //Basemap Toggle
+    "esri/widgets/BasemapToggle",
+
+BasemapToggle,
+
+
+ 2. Add code to create/display the BasemapToggle under the MapView:
+
+    var toggle = new BasemapToggle({
+      titleVisible: true,
+      view: view
+      });
+    view.ui.add(toggle, "bottom-right");

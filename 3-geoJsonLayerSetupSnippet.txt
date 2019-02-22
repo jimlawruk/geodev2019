@@ -1,0 +1,64 @@
+1. Add to require:
+
+      //GeoJSON Layer Setup
+      "esri/Graphic",
+      "esri/layers/GraphicsLayer",
+      "esri/geometry/Polyline",
+      "esri/request",
+      "esri/symbols/SimpleLineSymbol",
+      "esri/geometry/SpatialReference",
+ 
+ Graphic, GraphicsLayer, Polyline, request, SimpleLineSymbol, SpatialReference,
+ 
+ 
+ 2. Add these two functions below the Layer List code:
+ 
+         function addGeoJSONLayer(fileName, title, colorArray) {
+          request(fileName, { responseType: 'json' }).then(function (response) {
+            var geoJson = response.data;
+            var graphics = getEsriGraphicsFromGeoJson(geoJson, 4326, colorArray);
+            var graphicsLayer = new GraphicsLayer();
+            graphicsLayer.title = title;
+            graphics.forEach(function (graphic) {
+              graphicsLayer.add(graphic);
+            });
+            map.add(graphicsLayer);
+          });
+        }
+
+        function getEsriGraphicsFromGeoJson(geoJson, wkid, colorArray) {
+
+          return geoJson.features.map(function (feature, i) {
+            var paths = feature.geometry.coordinates || feature.geometry.paths;
+
+            var polyline = new Polyline({
+              'type': 'polyline',
+              'paths': paths,
+              'spatialReference': new SpatialReference({ 'wkid': wkid })
+            });
+
+            lineSymbol = new SimpleLineSymbol({ type: "simple-line", color: colorArray, width: 2, style: "solid" });
+
+            var graphicDefinition = {
+              geometry: polyline,
+              symbol: lineSymbol,
+              attributes: feature.properties || feature.attributes,
+              popupTemplate: {
+                title: "Segment",
+                content: [{
+                  type: "fields",
+                  fieldInfos: []
+                }]
+              }
+            }
+
+            for (var property in feature.properties) {
+              var fieldInfo = { "fieldName": property }
+              graphicDefinition.popupTemplate.content[0].fieldInfos.push(fieldInfo);
+            }
+
+            var polylineGraphic = new Graphic(graphicDefinition);
+            return polylineGraphic;
+          });
+
+        }

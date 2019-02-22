@@ -1,0 +1,7 @@
+Add the following code to add 3 GeoJSON layers:
+
+    addGeoJSONLayer("boyds.geojson", "Boyds", [200, 0, 0, 1]);
+
+    addGeoJSONLayer("greenbelt.geojson", "Greenbelt", [0, 200, 0, 1]);
+
+    addGeoJSONLayer("pinchot.geojson", "Pinchot", [0, 0, 200, 1]);
