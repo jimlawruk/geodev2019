@@ -9,12 +9,12 @@ FeatureLayer,
  2. Add code to add the DCNR Trails FeatureLayer:
 
 
-    var featureLayer = new FeatureLayer({
+    var featureLayer4 = new FeatureLayer({
       url: "//www.gis.dcnr.state.pa.us/agsprod/rest/services/Parks/State_Parks/MapServer/4"
     });
-    map.add(featureLayer);
+    map.add(featureLayer4);
 
-    var featureLayer = new FeatureLayer({
+    var featureLayer5 = new FeatureLayer({
       url: "//www.gis.dcnr.state.pa.us/agsprod/rest/services/Parks/State_Parks/MapServer/5"
     });
-    map.add(featureLayer);    
+    map.add(featureLayer5);
